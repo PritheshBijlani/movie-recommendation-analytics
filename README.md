@@ -2,6 +2,10 @@
 
 *Who gets recommended? A popularity-bias audit of movie recommenders.*
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blockbusted.streamlit.app/)
+
+**Live app: https://blockbusted.streamlit.app/**
+
 A popularity-bias audit of movie recommenders on **MovieLens 32M**, plus an interactive Streamlit app that lets you see the problem, the fix, and what the fix costs.
 
 ![The "Build your strip" tab: six picked movies, then the standard and balanced recommendation strips](docs/screenshot.png)
