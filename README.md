@@ -1,4 +1,6 @@
-# Who gets recommended?
+# 🍿 Blockbusted
+
+*Who gets recommended? A popularity-bias audit of movie recommenders.*
 
 A popularity-bias audit of movie recommenders on **MovieLens 32M**, plus an interactive Streamlit app that lets you see the problem, the fix, and what the fix costs.
 
