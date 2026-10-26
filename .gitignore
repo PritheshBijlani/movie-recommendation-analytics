@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+.DS_Store
+# MovieLens raw data downloaded by the notebook (do not redistribute)
+notebook/data/
+data/
+# the notebook writes a fresh artifacts/ next to itself; the repo-root one is the curated copy
+notebook/artifacts/

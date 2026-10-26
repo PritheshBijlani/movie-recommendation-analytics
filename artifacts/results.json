@@ -1,0 +1,92 @@
+{
+ "data": {
+  "ratings": 32000204,
+  "users": 200948,
+  "titles": 87585,
+  "eval_users": 20000,
+  "first_rating": "1995-01-09",
+  "last_rating": "2023-10-13"
+ },
+ "accuracy": {
+  "Hybrid (ALS + content, alpha=0.5)": 0.12556107409892492,
+  "Implicit ALS (f=64, reg=50, a=2)": 0.1249398782892851,
+  "PureSVD (f=30)": 0.12324030262839712,
+  "Item-kNN CF (k=100)": 0.11820092992982709,
+  "Global popularity": 0.07326833705197326,
+  "Weighted-rating pop (m=10000)": 0.06427910961674321,
+  "Weighted-rating pop (m=250)": 0.033219454203679125,
+  "Content-based (genres + decade)": 0.0032360782318329746,
+  "Random": 0.00014899551335536448
+ },
+ "accuracy_short": {
+  "Hybrid (ALS+content)": 0.12556107409892492,
+  "ALS": 0.1249398782892851,
+  "PureSVD": 0.12324030262839712,
+  "Item-kNN": 0.11820092992982709,
+  "Popularity": 0.07326833705197326,
+  "Weighted rating (tuned)": 0.06427910961674321,
+  "Weighted rating (m=250)": 0.033219454203679125,
+  "Content-based": 0.0032360782318329746,
+  "Random": 0.00014899551335536448
+ },
+ "best_model": "Hybrid (ALS+content)",
+ "demand_share": {
+  "head": 0.14425583704320533,
+  "mid": 0.5866380552797618,
+  "tail": 0.26910610767703297
+ },
+ "audit_als": {
+  "head_%": 48.419000000000004,
+  "tail_%": 0.0675,
+  "tail_ratio": 0.0025083042738297846,
+  "coverage_%": 1.435177256379517,
+  "gini": 0.9964642757321458,
+  "effective_titles": 419.38576494140125
+ },
+ "audit_pop": {
+  "head_%": 99.889,
+  "tail_%": 0.0,
+  "tail_ratio": 0.0,
+  "coverage_%": 0.20779813895073357,
+  "gini": 0.9997550727864359,
+  "effective_titles": 28.234044905440854
+ },
+ "mitigation_5pct": {
+  "lam": 0.4,
+  "gamma": 0.25,
+  "rel_ndcg_pct": 99.95213458307357,
+  "dndcg": "-0.0001 \u00b1 0.0012",
+  "tail_pct": 0.2215,
+  "coverage_pct": 1.9432551235942226,
+  "effective_titles": 445.1776189954114,
+  "genre_tvd": 0.25055575370788574,
+  "als_tail_pct": 0.0675,
+  "als_effective_titles": 419.38576494140125,
+  "als_coverage_pct": 1.435177256379517,
+  "als_genre_tvd": 0.29182201623916626
+ },
+ "simulation": {
+  "users": 3000,
+  "titles": 8000,
+  "rounds": 24,
+  "seeds": 3,
+  "cov_base": 10.825000000000001,
+  "cov_mit": 16.099999999999998,
+  "eff_pct": 15.646204127139395,
+  "click_pct": -2.3090651625648384,
+  "click_pct_min": -2.3448921115724053,
+  "click_pct_max": -2.255315542051628,
+  "head_slots_base": 56.800000000000004,
+  "head_slots_mit": 50.695833333333326,
+  "tail_slots_base": 0.028055555555555556,
+  "tail_slots_mit": 0.18888888888888888
+ },
+ "business": {
+  "net_base": 187018.61854360072,
+  "net_low": -116376.88419326785,
+  "net_high": 482910.1182019722,
+  "breakeven_excl_licence": 0.07378994751064283,
+  "breakeven_incl_licence": 0.0,
+  "subs": 1000000.0
+ }
+}

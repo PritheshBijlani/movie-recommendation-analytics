@@ -1,0 +1,7 @@
+# Only needed to re-run the notebook end to end (includes the app requirements)
+-r requirements.txt
+implicit
+matplotlib
+seaborn
+psutil
+jupyter

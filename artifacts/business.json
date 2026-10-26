@@ -1,0 +1,70 @@
+{
+ "sim": {
+  "cov_base": 10.825000000000001,
+  "cov_mit": 16.099999999999998,
+  "eff_pct": 15.646204127139395,
+  "click_pct": -2.3090651625648384
+ },
+ "n_titles": 8000,
+ "n_sim_users": 3000,
+ "rounds": 24,
+ "retrain_every": 4,
+ "assume": [
+  {
+   "key": "subs",
+   "assumption": "Subscribers",
+   "base": 1000000.0,
+   "low": null,
+   "high": null
+  },
+  {
+   "key": "arpu",
+   "assumption": "Revenue per subscriber per month ($)",
+   "base": 12.0,
+   "low": null,
+   "high": null
+  },
+  {
+   "key": "margin",
+   "assumption": "Contribution margin on a retained subscriber-year",
+   "base": 0.35,
+   "low": 0.2,
+   "high": 0.5
+  },
+  {
+   "key": "licensed_share",
+   "assumption": "Share of the catalog that is licensed (not owned)",
+   "base": 0.7,
+   "low": 0.4,
+   "high": 0.9
+  },
+  {
+   "key": "license_cost",
+   "assumption": "Average annual licence cost per licensed title ($)",
+   "base": 15000.0,
+   "low": 5000.0,
+   "high": 30000.0
+  },
+  {
+   "key": "util_recovery",
+   "assumption": "Share of a title's licence cost 'put to work' when it gets surfaced",
+   "base": 0.05,
+   "low": 0.0,
+   "high": 0.1
+  },
+  {
+   "key": "eng_churn_per_pct",
+   "assumption": "Retention lost (pp/yr) per 1% fall in engagement",
+   "base": 0.05,
+   "low": 0.0,
+   "high": 0.1
+  },
+  {
+   "key": "div_churn_per_10pct",
+   "assumption": "Retention gained (pp/yr) per +10% effective titles",
+   "base": 0.03,
+   "low": 0.0,
+   "high": 0.08
+  }
+ ]
+}
