@@ -1,4 +1,4 @@
-"""Look and feel: a photographer's light table. Recommendations are 35mm film frames; how bright a frame is tells you how
+"""Blockbusted look and feel: a photographer's light table with a popcorn-stripe masthead. Recommendations are 35mm film frames; how bright a frame is tells you how
 exposed that title already is (head = fully exposed, tail = underexposed). Red grease-pencil circles mark picks and hits."""
 import html
 
@@ -79,6 +79,28 @@ hr {{ border-color:var(--line); }}
 .verdict {{ background:#eef4ee; border:1px solid #d7e3d8; border-left:5px solid var(--accent); border-radius:0 12px 12px 0; padding:13px 16px; margin:12px 0; }}
 [data-testid="stAlert"] {{ border-radius:12px; }}
 @media(prefers-reduced-motion:reduce){{*{{animation:none!important;transition:none!important;}}}}
+
+/* Blockbusted: popcorn flair */
+.masthead {{ position:relative; overflow:hidden; border-bottom:8px solid transparent; border-image:repeating-linear-gradient(90deg,#c65d4b 0 22px,#fbf3dc 22px 44px) 1; }}
+.masthead .stamp .kern {{ display:inline-block; cursor:pointer; transition:transform .15s; }}
+.masthead .stamp .kern:hover {{ transform:rotate(18deg) scale(1.25); }}
+.stButton > button {{ transition:transform .12s ease, box-shadow .12s ease; }}
+.stButton > button:hover {{ transform:translateY(-2px) rotate(-.6deg); box-shadow:0 6px 0 rgba(198,93,75,.35); }}
+.stButton > button:active {{ transform:translateY(1px) scale(.97); }}
+.stTabs [data-baseweb="tab"]:hover {{ transform:translateY(-2px); transition:transform .12s; }}
+.bb-pop {{ position:fixed; pointer-events:none; z-index:999999; font-size:1.5rem; will-change:transform,opacity; }}
+@media (prefers-reduced-motion: reduce) {{ .stButton > button:hover, .masthead .stamp .kern:hover {{ transform:none; }} }}
+
+/* Readability: never inherit a light/dark theme colour for text on our light background */
+.stTabs [data-baseweb="tab"] p, .stTabs [data-baseweb="tab"] div, .stTabs [data-baseweb="tab"] span {{ color:#3d5249 !important; font-weight:700; }}
+.stTabs [aria-selected="true"] p, .stTabs [aria-selected="true"] div, .stTabs [aria-selected="true"] span {{ color:#fff !important; }}
+[data-testid="stWidgetLabel"], [data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] label, .stApp label {{ color:#20332f !important; opacity:1 !important; }}
+.stApp [data-testid="stMarkdownContainer"] p, .stApp [data-testid="stMarkdownContainer"] li {{ color:#20332f; }}
+.stApp [data-baseweb="select"] > div, .stApp [data-baseweb="input"] > div {{ background:#fff !important; color:#20332f !important; border:1px solid #cdd8cf; }}
+.stApp [data-baseweb="select"] input, .stApp [data-baseweb="select"] span, .stApp [data-baseweb="select"] div {{ color:#20332f !important; }}
+.stApp [data-baseweb="select"] input::placeholder {{ color:#6b7d74 !important; opacity:1; }}
+.stButton > button p {{ white-space:nowrap; overflow:visible; text-overflow:clip; color:#20332f; }}
+.stButton > button {{ padding-left:.5rem; padding-right:.5rem; background:#fff; border:1px solid #cdd8cf; }}
 </style>
 """
 

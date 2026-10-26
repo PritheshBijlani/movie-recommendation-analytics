@@ -1,4 +1,4 @@
-"""Core logic for the 'Who Gets Recommended?' demo. Pure NumPy/pandas - no Streamlit - so it can be tested on its own."""
+"""Core logic for the 'Blockbusted' demo. Pure NumPy/pandas - no Streamlit - so it can be tested on its own."""
 import json
 import numpy as np
 import pandas as pd

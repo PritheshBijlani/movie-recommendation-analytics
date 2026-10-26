@@ -1,4 +1,4 @@
-"""Who Gets Recommended? - a popularity-bias audit you can play with.
+"""Blockbusted - a popularity-bias audit you can play with.
 Run:  streamlit run app.py        (needs ./artifacts from the notebook export cells)"""
 import time
 from pathlib import Path
@@ -11,8 +11,71 @@ import style
 
 alt.data_transformers.disable_max_rows()   # the catalog map plots thousands of points
 
-st.set_page_config(page_title="Who gets recommended?", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Blockbusted", page_icon="🍿", layout="wide", initial_sidebar_state="expanded")
 st.markdown(style.CSS, unsafe_allow_html=True)
+
+import streamlit.components.v1 as components
+
+POPCORN_JS = """
+<script>
+(function () {
+  const P = window.parent, D = P.document;
+  if (!P.__bb) {
+    const reduce = P.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const burst = (x, y, n, set) => {
+      n = reduce ? Math.min(n, 2) : n;
+      for (let i = 0; i < n; i++) {
+        const s = D.createElement("span"); s.className = "bb-pop";
+        s.textContent = set[Math.floor(Math.random() * set.length)];
+        s.style.left = x + "px"; s.style.top = y + "px"; D.body.appendChild(s);
+        const dx = (Math.random() - .5) * 260, dy = -80 - Math.random() * 160, r = (Math.random() - .5) * 540;
+        const a = s.animate([
+          {transform: "translate(-50%,-50%) scale(.4)", opacity: 1},
+          {transform: `translate(calc(-50% + ${dx*.6}px),calc(-50% + ${dy}px)) rotate(${r/2}deg) scale(1.2)`, opacity: 1, offset: .45},
+          {transform: `translate(calc(-50% + ${dx}px),calc(-50% + ${dy+260}px)) rotate(${r}deg) scale(.9)`, opacity: 0}],
+          {duration: 900 + Math.random() * 500, easing: "ease-out"});
+        a.onfinish = () => s.remove();
+      }
+    };
+    P.__bb = {
+      burst,
+      rain(n) {
+        n = n || 40; if (reduce) n = 6;
+        for (let i = 0; i < n; i++) setTimeout(() => {
+          const s = D.createElement("span"); s.className = "bb-pop";
+          s.textContent = ["🍿", "🍿", "🍿", "🎬", "🎟️"][i % 5];
+          s.style.left = Math.random() * P.innerWidth + "px"; s.style.top = "-40px"; D.body.appendChild(s);
+          const a = s.animate([{transform: "translateY(0) rotate(0)", opacity: 1},
+            {transform: `translateY(${P.innerHeight + 80}px) rotate(${(Math.random()-.5)*720}deg)`, opacity: .9}],
+            {duration: 1600 + Math.random() * 1400, easing: "ease-in"});
+          a.onfinish = () => s.remove();
+        }, i * 45);
+      }
+    };
+    D.addEventListener("pointerdown", e => {
+      const t = e.target.closest ? e.target.closest("button,[role=tab],.kern") : null;
+      P.__bb.burst(e.clientX, e.clientY, t ? 8 : 3, t ? ["🍿", "🍿", "🌽", "✨"] : ["🍿", "🎬", "🎟️"]);
+    }, true);
+  }
+})();
+</script>
+"""
+def _inject(snippet: str):
+    """Run a tiny script in a hidden same-origin iframe (st.iframe on new Streamlit, components.html on older)."""
+    snippet = snippet.strip()
+    if hasattr(st, "iframe"):
+        st.iframe(snippet, height=1, width=1)
+    else:
+        components.html(snippet, height=0)
+
+
+_inject(POPCORN_JS)
+
+
+def popcorn_rain(n=40):
+    """Fire a one-off shower of popcorn (call once per rerun, right after the action)."""
+    _inject(f"<script>window.parent.__bb && window.parent.__bb.rain({n});</script>")
+
 
 
 @st.cache_resource
@@ -37,19 +100,19 @@ GREASE, FIXER, ACETATE = style.GREASE, style.FIXER, style.ACETATE
 html = lambda s: st.markdown(s, unsafe_allow_html=True)
 
 # ------------------------------------------------------------------ sidebar
-st.sidebar.markdown("### Balance strength")
+st.sidebar.markdown("### 🧈 Balance strength")
 lam = st.sidebar.select_slider("How hard the balanced list tries to match your genre mix", options=meta["lams"], value=meta["default_lam"], label_visibility="collapsed")
 st.sidebar.caption(f"Left: keep the model's own order. Right: rebuild each list to mirror your genre mix, which costs some accuracy. "
                    f"{meta['default_lam']} is the setting used in the feedback-loop simulation.")
-st.sidebar.markdown("### Reading the frames")
+st.sidebar.markdown("### 🎞️ Reading the frames")
 st.sidebar.markdown(style.strip(items, [int(items[items.group == g].sort_values("train_count", ascending=False).item_idx.iloc[k]) for g, k in (("head", 0), ("mid", 3), ("tail", 3))], cols=3), unsafe_allow_html=True)
 st.sidebar.caption("A bright frame is a head title: it already gets most of the attention. Grey is mid. Dark is tail, the long run of titles that rarely get shown. "
                    "Red circles mark your picks, or titles a viewer really liked later.")
 st.sidebar.caption("MovieLens ratings, offline replay. Nothing here is a live service.")
 
-html("<div class='masthead'><div><div style='font:700 .72rem DM Sans,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#c8d9cc;margin-bottom:9px'>RECOMMENDER SYSTEMS · INTERACTIVE AUDIT</div><div class='stamp'>Who gets recommended?</div></div>"
-     "<div class='sub'>A hands-on investigation into popularity bias. Build a movie profile, compare recommendation strategies, and see how feedback loops shape what everyone gets to watch.</div></div>")
-t_build, t_blind, t_loop, t_audit, t_room = st.tabs(["Build your strip", "Blind test", "Rewind the loop", "Audit a viewer", "Boardroom"])
+html("<div class='masthead'><div><div style='font:700 .72rem DM Sans,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#c8d9cc;margin-bottom:9px'>🍿 POPULARITY-BIAS AUDIT · INTERACTIVE</div><div class='stamp'>Block<span class='kern' title='Pop!'>🍿</span>busted</div></div>"
+     "<div class='sub'>Who gets recommended, and who gets left in the dark? A hands-on investigation into popularity bias. Build a movie profile, compare recommendation strategies, and see how feedback loops shape what everyone gets to watch.</div></div>")
+t_build, t_blind, t_loop, t_audit, t_room = st.tabs(["🎞️ Build your strip", "🎭 Blind test", "⏪ Rewind the loop", "🔍 Audit a viewer", "💼 Boardroom"])
 
 
 def catalog_map(picks, std, mit):
@@ -83,18 +146,23 @@ with t_build:
         st.markdown(f"#### Pick {MIN_PICKS} to {MAX_PICKS} movies you like. They become your strip.")
         picks = st.multiselect("Search by title", eligible.item_idx.tolist(), key="picks", max_selections=MAX_PICKS, format_func=lambda i: title_of[i],
                                placeholder="Start typing a title")
-        cols = st.columns([1, 1, 1, 1, 1.25, 0.7, 2])
-        for col, g in zip(cols[:4], ["Sci-Fi", "Romance", "Horror", "Children's"]):
-            col.button(f"{g} fan", on_click=preset, args=(g,), use_container_width=True)
-        cols[4].button("Niche taste", on_click=preset_niche, use_container_width=True)
-        cols[5].button("Clear", on_click=lambda: st.session_state.update(picks=[]), use_container_width=True)
+        cols = st.columns([1.2, 1.3, 1.15, 1.35, 1.4, 1.1, 0.8])
+        for col, (g, em) in zip(cols[:4], [("Sci-Fi", "🚀"), ("Romance", "💘"), ("Horror", "👻"), ("Children's", "🧸")]):
+            col.button(f"{em} {g} fan", on_click=preset, args=(g,), use_container_width=True)
+        cols[4].button("💎 Niche taste", on_click=preset_niche, use_container_width=True)
+        cols[5].button("🧹 Clear", on_click=lambda: st.session_state.update(picks=[]), use_container_width=True)
         html(style.strip(items, picks, picks=picks, pad_to=max(MIN_PICKS, len(picks))))
 
         if len(picks) < MIN_PICKS:
+            st.session_state["strip_celebrated"] = False
             n = MIN_PICKS - len(picks)
-            html(f"<div class='note'>{n} more to go</div>")
+            html(f"<div class='note'>🍿 {n} more to go</div>")
         else:
             std, mit, p = core.recommend_for_picks(A, picks, lam)
+            if not st.session_state.get("strip_celebrated"):
+                st.session_state["strip_celebrated"] = True
+                st.toast("Your strip is ready!", icon="🍿")
+                popcorn_rain(30)
             std_s, mit_s, pick_s = core.list_share(A, std), core.list_share(A, mit), core.pick_summary(A, picks)
             n_head_std, n_head_mit = round(std_s["head"] * 10), round(mit_s["head"] * 10)
             st.markdown("---")
@@ -141,13 +209,14 @@ with t_blind:
 
     def vote(which):
         bt["round"]["choice"] = which
+        st.session_state["rain_now"] = True
         r = bt["round"]; a_list, b_list = (r["std"], r["mit"]) if r["a_is_std"] else (r["mit"], r["std"])
         hits = lambda L: sum(int(i) in r["future"] for i in L)
         bt["votes"].append({"chose_balanced": (which == "A") != r["a_is_std"], "hits_a": hits(a_list), "hits_b": hits(b_list), "a_is_std": r["a_is_std"]})
 
     if bt["round"] is None:
         html("<div class='note'>Deal a viewer to start</div>")
-        st.button("Deal a viewer", on_click=deal, key="deal0")
+        st.button("🎲 Deal a viewer", on_click=deal, key="deal0")
     else:
         r = bt["round"]; a_list, b_list = (r["std"], r["mit"]) if r["a_is_std"] else (r["mit"], r["std"])
         st.markdown("**This viewer liked**")
@@ -160,17 +229,19 @@ with t_blind:
         html(style.strip(items, b_list, hits=hit_set))
         if not reveal:
             c1, c2, _ = st.columns([1, 1, 4])
-            c1.button("Send list A", on_click=vote, args=("A",), key="voteA", use_container_width=True)
-            c2.button("Send list B", on_click=vote, args=("B",), key="voteB", use_container_width=True)
+            c1.button("🍿 Send list A", on_click=vote, args=("A",), key="voteA", use_container_width=True)
+            c2.button("🍿 Send list B", on_click=vote, args=("B",), key="voteB", use_container_width=True)
         else:
             v = bt["votes"][-1]
+            if st.session_state.pop("rain_now", False):
+                popcorn_rain(40 if v["hits_a"] != v["hits_b"] else 15)
             html(f"<div class='verdict'>Red circles are titles this viewer really liked later: list A hit {v['hits_a']}, list B hit {v['hits_b']}. "
                  f"One viewer is a coin flip; the pattern shows over many rounds.</div>")
-            st.button("Deal another viewer", on_click=deal, key="deal1")
+            st.button("🎲 Deal another viewer", on_click=deal, key="deal1")
     if bt["votes"]:
         n = len(bt["votes"]); k = sum(v["chose_balanced"] for v in bt["votes"])
         better = sum((v["hits_a"] > v["hits_b"]) == (not v["a_is_std"]) and v["hits_a"] != v["hits_b"] for v in bt["votes"])
-        st.caption(f"Your tally: you chose the balanced list in {k} of {n} rounds. The balanced list had more hits in {better} of them.")
+        st.caption(f"🍿 Your tally: you chose the balanced list in {k} of {n} rounds. The balanced list had more hits in {better} of them.")
 
 
 # ================================================================== 3. Rewind the loop
